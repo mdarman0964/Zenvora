@@ -138,7 +138,11 @@ fun SettingsPage(onNavigateBack: () -> Unit, onNavigateTo: (String) -> Unit) {
             }
         },
     ) {
-        LazyColumn(\n            modifier = Modifier,\n            contentPadding = it,\n            verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp),\n        ) {
+        LazyColumn(
+            modifier = Modifier,
+            contentPadding = it,
+            verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp),
+        ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 item {
                     AnimatedVisibility(
