@@ -149,6 +149,11 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
                             view.slightHapticFeedback()
                             scope.launch { drawerState.open() }
                         },
+                        onNavigateToAbout = {
+                            navController.navigate(Route.ABOUT) {
+                                launchSingleTop = true
+                            }
+                        },
                     )
                 }
                 animatedComposable(Route.DOWNLOADS) { VideoListPage { onNavigateBack() } }
