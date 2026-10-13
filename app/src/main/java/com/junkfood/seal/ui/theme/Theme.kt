@@ -69,13 +69,13 @@ fun SealTheme(
                         onPrimaryContainer = Color(0xFFE8DDFF),
                         secondary = Color(0xFFB8C4FF),
                         tertiary = Color(0xFFFFB7D5),
-                        background = Color(0xFF101019),
-                        surface = Color(0xFF101019),
-                        surfaceContainerLowest = Color(0xFF0B0B12),
-                        surfaceContainerLow = Color(0xFF171722),
-                        surfaceContainer = Color(0xFF1D1C29),
-                        surfaceContainerHigh = Color(0xFF272536),
-                        surfaceContainerHighest = Color(0xFF323044),
+                        background = Color(0xFF070B1B),
+                        surface = Color(0xFF090E22),
+                        surfaceContainerLowest = Color(0xFF060918),
+                        surfaceContainerLow = Color(0xFF0E142B),
+                        surfaceContainer = Color(0xFF141B35),
+                        surfaceContainerHigh = Color(0xFF1D2543),
+                        surfaceContainerHighest = Color(0xFF28304F),
                     )
                 } else {
                     copy(
@@ -85,6 +85,13 @@ fun SealTheme(
                         onPrimaryContainer = Color(0xFF25105A),
                         secondary = Color(0xFF4C5DA8),
                         tertiary = Color(0xFF9A416C),
+                        background = Color(0xFFF7F5FF),
+                        surface = Color(0xFFFBFAFF),
+                        surfaceContainerLowest = Color.White,
+                        surfaceContainerLow = Color(0xFFF5F2FF),
+                        surfaceContainer = Color(0xFFEEEAFE),
+                        surfaceContainerHigh = Color(0xFFE7E2F8),
+                        surfaceContainerHighest = Color(0xFFDDD7F0),
                     )
                 }
             if (isHighContrastModeEnabled && darkTheme)
