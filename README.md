@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="fastlane/metadata/android/en-US/images/icon.png" width="144" height="144" alt="Zenvora app icon">
+<img src="docs/zenvora-icon.svg" width="144" height="144" alt="Zenvora app icon">
 
 # Zenvora
 
