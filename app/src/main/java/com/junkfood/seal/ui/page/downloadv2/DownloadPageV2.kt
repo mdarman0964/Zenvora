@@ -38,9 +38,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.GridView
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButton
@@ -201,6 +204,7 @@ sealed interface UiAction {
 fun DownloadPageV2(
     modifier: Modifier = Modifier,
     onMenuOpen: (() -> Unit) = {},
+    onNavigateToAbout: () -> Unit = {},
     dialogViewModel: DownloadDialogViewModel,
     downloader: DownloaderV2 = koinInject(),
 ) {
@@ -218,6 +222,7 @@ fun DownloadPageV2(
             dialogViewModel.postAction(Action.ShowSheet())
         },
         onMenuOpen = onMenuOpen,
+        onNavigateToAbout = onNavigateToAbout,
     ) { task, action ->
         view.slightHapticFeedback()
         when (action) {
@@ -323,6 +328,7 @@ fun DownloadPageImplV2(
     taskDownloadStateMap: SnapshotStateMap<Task, Task.State>,
     downloadCallback: () -> Unit = {},
     onMenuOpen: (() -> Unit) = {},
+    onNavigateToAbout: () -> Unit = {},
     onActionPost: (Task, UiAction) -> Unit,
 ) {
     var activeFilter by remember { mutableStateOf(Filter.All) }
@@ -387,7 +393,11 @@ fun DownloadPageImplV2(
             CompositionLocalProvider(LocalOverscrollFactory provides null) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Spacer(Modifier.height(with(LocalDensity.current) { headerOffset.toDp() }))
-                    Header(onMenuOpen = onMenuOpen, modifier = Modifier.padding(horizontal = 16.dp))
+                    Header(
+                        onMenuOpen = onMenuOpen,
+                        onNavigateToAbout = onNavigateToAbout,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                    )
                     SelectionGroupRow(
                         modifier =
                             Modifier.horizontalScroll(rememberScrollState())
@@ -538,22 +548,35 @@ fun DownloadPageImplV2(
 }
 
 @Composable
-fun Header(modifier: Modifier = Modifier, onMenuOpen: () -> Unit = {}) {
+fun Header(
+    modifier: Modifier = Modifier,
+    onMenuOpen: () -> Unit = {},
+    onNavigateToAbout: () -> Unit = {},
+) {
     val windowWidthSizeClass = LocalWindowWidthState.current
     when (windowWidthSizeClass) {
         WindowWidthSizeClass.Expanded -> {
             HeaderExpanded(modifier = modifier)
         }
         else -> {
-            HeaderCompact(modifier = modifier, onMenuOpen = onMenuOpen)
+            HeaderCompact(
+                modifier = modifier,
+                onMenuOpen = onMenuOpen,
+                onNavigateToAbout = onNavigateToAbout,
+            )
         }
     }
 }
 
 @Composable
-private fun HeaderCompact(modifier: Modifier = Modifier, onMenuOpen: () -> Unit) {
+private fun HeaderCompact(
+    modifier: Modifier = Modifier,
+    onMenuOpen: () -> Unit,
+    onNavigateToAbout: () -> Unit,
+) {
+    var showOverflowMenu by remember { mutableStateOf(false) }
 
-    Row(modifier = modifier.height(72.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = onMenuOpen, modifier = Modifier) {
             Icon(
                 imageVector = Icons.Outlined.Menu,
@@ -594,6 +617,28 @@ private fun HeaderCompact(modifier: Modifier = Modifier, onMenuOpen: () -> Unit)
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Box {
+            IconButton(onClick = { showOverflowMenu = true }) {
+                Icon(
+                    imageVector = Icons.Outlined.MoreVert,
+                    contentDescription = stringResource(R.string.about),
+                )
+            }
+            DropdownMenu(
+                expanded = showOverflowMenu,
+                onDismissRequest = { showOverflowMenu = false },
+            ) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.about)) },
+                    leadingIcon = { Icon(Icons.Outlined.Info, contentDescription = null) },
+                    onClick = {
+                        showOverflowMenu = false
+                        onNavigateToAbout()
+                    },
+                )
+            }
         }
     }
 }
