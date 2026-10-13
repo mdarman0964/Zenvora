@@ -38,12 +38,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButton
@@ -574,8 +570,6 @@ private fun HeaderCompact(
     onMenuOpen: () -> Unit,
     onNavigateToAbout: () -> Unit,
 ) {
-    var showOverflowMenu by remember { mutableStateOf(false) }
-
     Row(modifier = modifier.fillMaxWidth().height(72.dp), verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = onMenuOpen, modifier = Modifier) {
             Icon(
@@ -618,28 +612,7 @@ private fun HeaderCompact(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        Spacer(modifier = Modifier.weight(1f))
-        Box {
-            IconButton(onClick = { showOverflowMenu = true }) {
-                Icon(
-                    imageVector = Icons.Outlined.MoreVert,
-                    contentDescription = stringResource(R.string.about),
-                )
-            }
-            DropdownMenu(
-                expanded = showOverflowMenu,
-                onDismissRequest = { showOverflowMenu = false },
-            ) {
-                DropdownMenuItem(
-                    text = { Text(stringResource(R.string.about)) },
-                    leadingIcon = { Icon(Icons.Outlined.Info, contentDescription = null) },
-                    onClick = {
-                        showOverflowMenu = false
-                        onNavigateToAbout()
-                    },
-                )
-            }
-        }
+
     }
 }
 
