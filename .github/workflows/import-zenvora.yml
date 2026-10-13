@@ -1,0 +1,36 @@
+name: Import Zenvora source
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  import-source:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout destination repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Copy Zenvora branding branch
+        run: |
+          git clone --depth 1 --branch zenvora/branding-ui https://github.com/mdarman0964/Seal.git /tmp/zenvora-source
+          rsync -a --delete --exclude='.git' --exclude='.github/workflows/import-zenvora.yml' /tmp/zenvora-source/ ./
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No source changes to import."
+            exit 0
+          fi
+          git commit -m "Import Zenvora branding source [skip ci]"
+          git push origin HEAD:main
