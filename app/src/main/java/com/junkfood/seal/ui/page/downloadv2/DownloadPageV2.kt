@@ -559,14 +559,21 @@ private fun HeaderCompact(modifier: Modifier = Modifier, onMenuOpen: () -> Unit)
             )
         }
         Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            stringResource(R.string.download_queue),
-            style =
-                MaterialTheme.typography.titleLarge.copy(
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium,
+        Column(verticalArrangement = Arrangement.Center) {
+            Text(
+                "Zenvora",
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontSize = 21.sp,
+                    fontWeight = FontWeight.SemiBold,
                 ),
-        )
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+                stringResource(R.string.download_queue),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 
@@ -574,10 +581,18 @@ private fun HeaderCompact(modifier: Modifier = Modifier, onMenuOpen: () -> Unit)
 private fun HeaderExpanded(modifier: Modifier = Modifier) {
     Row(modifier = modifier.height(64.dp), verticalAlignment = Alignment.CenterVertically) {
         Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            stringResource(R.string.download_queue),
-            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Medium),
-        )
+        Column(verticalArrangement = Arrangement.Center) {
+            Text(
+                "Zenvora",
+                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.SemiBold),
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+                stringResource(R.string.download_queue),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
     Spacer(Modifier.height(4.dp))
 }
