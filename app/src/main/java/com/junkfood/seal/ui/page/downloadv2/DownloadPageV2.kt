@@ -41,6 +41,7 @@ import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Button
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -509,7 +510,8 @@ fun DownloadPageImplV2(
             Box(modifier = Modifier.fillMaxSize()) {
                 DownloadQueuePlaceholder(
                     modifier =
-                        Modifier.fillMaxHeight(0.4f).widthIn(max = 360.dp).align(Alignment.Center)
+                        Modifier.fillMaxHeight(0.6f).widthIn(max = 360.dp).align(Alignment.Center),
+                    onDownloadClick = downloadCallback,
                 )
             }
         }
@@ -648,7 +650,10 @@ fun FABs(modifier: Modifier = Modifier, downloadCallback: () -> Unit = {}) {
 
 @Composable
 @Preview
-private fun DownloadQueuePlaceholder(modifier: Modifier = Modifier) {
+private fun DownloadQueuePlaceholder(
+    modifier: Modifier = Modifier,
+    onDownloadClick: () -> Unit = {},
+) {
     BoxWithConstraints(modifier = modifier) {
         ConstraintLayout {
             val (image, text) = createRefs()
@@ -682,12 +687,21 @@ private fun DownloadQueuePlaceholder(modifier: Modifier = Modifier) {
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    text = stringResource(R.string.download_hint),
-                    modifier = Modifier.padding(top = 4.dp).padding(horizontal = 24.dp),
+                    text = "Paste a video or audio link to get started.",
+                    modifier = Modifier.padding(top = 8.dp).padding(horizontal = 24.dp),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                 )
+                Button(
+                    onClick = onDownloadClick,
+                    modifier = Modifier.padding(top = 20.dp).padding(horizontal = 24.dp),
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Icon(Icons.Outlined.FileDownload, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.download))
+                }
             }
         }
     }
