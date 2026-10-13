@@ -210,7 +210,7 @@ fun NavGraphBuilder.settingsGraph(
             AboutPage(
                 onNavigateBack = onNavigateBack,
                 onNavigateToCreditsPage = { onNavigateTo(Route.CREDITS) },
-                onNavigateToUpdatePage = { onNavigateTo(Route.AUTO_UPDATE) }
+                onNavigateToUpdatePage = { onNavigateTo(Route.AUTO_UPDATE) },
             )
         }
         animatedComposable(Route.CREDITS) { CreditsPage(onNavigateBack) }
