@@ -1,6 +1,7 @@
 package com.junkfood.seal.ui.page.settings.about
 
-import androidx.compose.foundation.Image
+import android.widget.ImageView
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,7 +38,6 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -118,9 +118,18 @@ fun AboutPage(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        Image(
-                            painter = painterResource(id = R.mipmap.ic_launcher),
-                            contentDescription = "Zenvora app icon",
+                        AndroidView(
+                            factory = { viewContext ->
+                                ImageView(viewContext).apply {
+                                    contentDescription = "Zenvora app icon"
+                                    scaleType = ImageView.ScaleType.FIT_CENTER
+                                    setImageDrawable(
+                                        viewContext.packageManager.getApplicationIcon(
+                                            viewContext.packageName
+                                        )
+                                    )
+                                }
+                            },
                             modifier = Modifier.size(84.dp),
                         )
                         Text(
