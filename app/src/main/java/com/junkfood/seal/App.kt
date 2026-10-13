@@ -12,6 +12,7 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.os.IBinder
 import androidx.core.content.getSystemService
 import com.google.android.material.color.DynamicColors
@@ -100,9 +101,24 @@ class App : Application() {
             }
         }
 
-        videoDownloadDir = VIDEO_DIRECTORY.getString(getExternalDownloadDirectory().absolutePath)
+        val defaultDownloadDir = getExternalDownloadDirectory().absolutePath
+        val legacyDownloadDir =
+            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "Seal")
+                .absolutePath
+        val savedVideoDir = VIDEO_DIRECTORY.getString(defaultDownloadDir)
+        // Migrate the previous default folder without changing a user-selected custom folder.
+        videoDownloadDir = if (savedVideoDir == legacyDownloadDir) defaultDownloadDir else savedVideoDir
+        if (savedVideoDir == legacyDownloadDir) {
+            VIDEO_DIRECTORY.updateString(defaultDownloadDir)
+        }
 
-        audioDownloadDir = AUDIO_DIRECTORY.getString(File(videoDownloadDir, "Audio").absolutePath)
+        val legacyAudioDir = File(legacyDownloadDir, "Audio").absolutePath
+        val defaultAudioDir = File(videoDownloadDir, "Audio").absolutePath
+        val savedAudioDir = AUDIO_DIRECTORY.getString(defaultAudioDir)
+        audioDownloadDir = if (savedAudioDir == legacyAudioDir) defaultAudioDir else savedAudioDir
+        if (savedAudioDir == legacyAudioDir) {
+            AUDIO_DIRECTORY.updateString(defaultAudioDir)
+        }
         if (!PreferenceUtil.containsKey(COMMAND_DIRECTORY)) {
             COMMAND_DIRECTORY.updateString(videoDownloadDir)
         }
