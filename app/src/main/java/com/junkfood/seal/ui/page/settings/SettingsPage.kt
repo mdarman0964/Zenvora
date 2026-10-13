@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -117,7 +118,19 @@ fun SettingsPage(onNavigateBack: () -> Unit, onNavigateTo: (String) -> Unit) {
 
             MaterialTheme(typography = overrideTypography) {
                 LargeTopAppBar(
-                    title = { Text(text = stringResource(id = R.string.settings)) },
+                    title = {
+                        Column {
+                            Text(
+                                text = stringResource(id = R.string.settings),
+                                style = MaterialTheme.typography.headlineSmall,
+                            )
+                            Text(
+                                text = "Make Zenvora work your way",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    },
                     navigationIcon = { BackButton(onNavigateBack) },
                     scrollBehavior = scrollBehavior,
                     expandedHeight = TopAppBarDefaults.LargeAppBarExpandedHeight + 24.dp,
@@ -125,7 +138,7 @@ fun SettingsPage(onNavigateBack: () -> Unit, onNavigateTo: (String) -> Unit) {
             }
         },
     ) {
-        LazyColumn(modifier = Modifier, contentPadding = it) {
+        LazyColumn(\n            modifier = Modifier,\n            contentPadding = it,\n            verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp),\n        ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 item {
                     AnimatedVisibility(
