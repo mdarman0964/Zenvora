@@ -397,10 +397,8 @@ fun DownloadPageImplV2(
                             SelectionGroupItem(
                                 colors =
                                     SelectionGroupDefaults.colors(
-                                        activeContainerColor =
-                                            LocalFixedColorRoles.current.tertiaryFixed,
-                                        activeContentColor =
-                                            LocalFixedColorRoles.current.onTertiaryFixed,
+                                        activeContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                        activeContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                     ),
                                 selected = activeFilter == filter,
                                 onClick = {
