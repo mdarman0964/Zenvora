@@ -16,7 +16,6 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.NewReleases
 import androidx.compose.material.icons.outlined.Update
 import androidx.compose.material.icons.outlined.UpdateDisabled
-import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -68,7 +67,6 @@ const val YtdlpRepository = "https://github.com/yt-dlp/yt-dlp"
 private const val githubIssueUrl = "https://github.com/JunkFood02/Seal/issues"
 private const val telegramChannelUrl = "https://t.me/seal_app"
 private const val matrixSpaceUrl = "https://matrix.to/#/#seal-space:matrix.org"
-private const val githubSponsor = "https://github.com/sponsors/JunkFood02"
 private const val TAG = "AboutPage"
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,7 +90,6 @@ fun AboutPage(
     //    val screenWidth = (configuration.screenWidthDp.toFloat() * screenDensity).roundToInt()
     var isAutoUpdateEnabled by remember { mutableStateOf(PreferenceUtil.isAutoUpdateEnabled()) }
 
-    val info = App.getVersionReport()
     val versionName = packageInfo.versionName
 
     //        infoBuilder.append("App version: $versionName ($versionCode)\n")
@@ -211,7 +208,7 @@ fun AboutPage(
                         description = versionName,
                         icon = Icons.Outlined.Info,
                     ) {
-                        clipboardManager.setText(AnnotatedString(info))
+                        clipboardManager.setText(AnnotatedString(App.getVersionReport()))
                         ToastUtil.makeToast(R.string.info_copied)
                     }
                 }
