@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: zenvora-apk-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
