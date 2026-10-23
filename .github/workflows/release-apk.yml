@@ -1,0 +1,71 @@
+name: Zenvora Release APK
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'release-*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: zenvora-release-apk
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      # A temporary signing key makes this APK installable for testing.
+      # Configure a persistent private release keystore for long-term updates/Play Store releases.
+      - name: Create temporary signing key
+        run: |
+          keytool -genkeypair -v \
+            -keystore "$RUNNER_TEMP/zenvora-release-test.jks" \
+            -storepass zenvoraTestOnly \
+            -keypass zenvoraTestOnly \
+            -alias zenvora \
+            -keyalg RSA -keysize 2048 -validity 3650 \
+            -dname "CN=Zenvora Test, OU=Android, O=Zenvora, L=Unknown, ST=Unknown, C=US"
+          printf 'storeFile=%s\nstorePassword=zenvoraTestOnly\nkeyAlias=zenvora\nkeyPassword=zenvoraTestOnly\n' "$RUNNER_TEMP/zenvora-release-test.jks" > keystore.properties
+
+      - name: Build release APKs
+        run: ./gradlew :app:assembleGenericRelease --no-daemon --stacktrace
+
+      - name: Collect APKs
+        run: |
+          mkdir -p release-apks
+          find app/build/outputs/apk/generic/release -maxdepth 1 -type f -name '*.apk' -exec cp {} release-apks/ \;
+          test -n "$(find release-apks -maxdepth 1 -name '*.apk' -print -quit)"
+
+      - name: Upload release APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Zenvora-Release-APK
+          path: release-apks/*.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish GitHub Release when triggered by a tag
+        if: startsWith(github.ref, 'refs/tags/release-')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" release-apks/*.apk \
+            --title "Zenvora $GITHUB_REF_NAME" \
+            --notes "Automated Zenvora release APK build. Test-signing key used; configure a persistent private keystore for production updates."
