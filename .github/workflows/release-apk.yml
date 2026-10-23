@@ -44,8 +44,8 @@ jobs:
             -dname "CN=Zenvora Test, OU=Android, O=Zenvora, L=Unknown, ST=Unknown, C=US"
           printf 'storeFile=%s\nstorePassword=zenvoraTestOnly\nkeyAlias=zenvora\nkeyPassword=zenvoraTestOnly\n' "$RUNNER_TEMP/zenvora-release-test.jks" > keystore.properties
 
-      - name: Build release APKs
-        run: ./gradlew :app:assembleGenericRelease --no-daemon --stacktrace
+      - name: Build compact ARM64 release APK
+        run: ./gradlew :app:assembleGenericRelease -PnoSplits --no-daemon --stacktrace
 
       - name: Collect APKs
         run: |
